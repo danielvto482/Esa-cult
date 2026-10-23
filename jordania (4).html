@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Desafio de Geografia: Jordânia</title>
+<style>
+/* ===== Paleta do deserto: areia, terracota de Wadi Rum, rosa de Petra, verde da bandeira ===== */
+:root{
+  --sand:#f3e3c3; --sand2:#e9cf9f; --card:#fffaf0; --line:#dcc29a;
+  --ink:#3a2314; --mut:#7a5a40; --terra:#a93f22; --terra2:#c7633a; --gold:#c99a3c;
+  --ok:#1f7a45; --bad:#b3261e; --font:Georgia,"Palatino Linotype",Palatino,serif; --ui:"Segoe UI",system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+body{font-family:var(--ui);color:var(--ink);line-height:1.55;min-height:100vh;
+  background:linear-gradient(180deg,#f8ecd2 0%,var(--sand) 45%,var(--sand2) 100%) fixed;
+  padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0)}
+.wrap{max-width:720px;margin:0 auto;padding:18px 16px 48px}
+header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.flag{width:60px;height:30px;border-radius:4px;border:1px solid #0003;box-shadow:0 2px 6px #0003}
+header b{font-family:var(--font);font-size:1rem;color:var(--mut);letter-spacing:.03em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 8px 24px rgba(90,50,20,.15)}
+.pad{padding:24px}
+.banner{display:block;width:100%;height:auto}
+h1{font-family:var(--font);font-size:clamp(1.6rem,6vw,2.4rem);line-height:1.15;color:var(--terra)}
+.sub{color:var(--mut);margin:10px 0 24px;font-size:1.05rem}
+.hidden{display:none!important}
+.divider{height:3px;margin:0 0 18px;background:repeating-linear-gradient(90deg,var(--terra) 0 14px,var(--gold) 14px 28px,var(--ok) 28px 42px);border-radius:3px;opacity:.85}
+
+/* ===== Botões ===== */
+.btn{font:inherit;font-weight:700;border:0;cursor:pointer;color:#fff;padding:13px 22px;border-radius:12px;
+  background:var(--terra);box-shadow:0 3px 0 #7d2c15;transition:transform .12s,background .2s,box-shadow .12s;touch-action:manipulation}
+.btn:hover{background:var(--terra2);transform:translateY(-1px)}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 #7d2c15}
+.btn.big{font-size:1.2rem;padding:17px 30px;letter-spacing:.05em;width:100%}
+.btn.ghost{background:transparent;color:var(--terra);border:2px solid var(--terra);box-shadow:none}
+.btn.ghost:hover{background:#a93f2214}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+:focus-visible{outline:3px solid var(--ok);outline-offset:3px}
+
+/* ===== Progresso ===== */
+.prog{margin-bottom:14px}
+.prog-top{display:flex;justify-content:space-between;font-size:.9rem;color:var(--mut);margin-bottom:6px}
+.bar{height:12px;border-radius:99px;background:#fffaf0;border:1px solid var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--gold),var(--terra));transition:width .5s ease}
+
+/* ===== Pergunta ===== */
+.qnum{color:var(--terra);font-weight:700;font-size:.95rem;margin-bottom:6px;letter-spacing:.04em;text-transform:uppercase}
+.qtxt{font-family:var(--font);font-size:clamp(1.15rem,3.8vw,1.45rem);margin-bottom:18px}
+.opts{display:grid;gap:10px}
+.opt{display:flex;gap:12px;align-items:center;text-align:left;width:100%;font:inherit;color:var(--ink);cursor:pointer;
+  padding:13px 14px;border-radius:12px;background:#fff;border:2px solid var(--line);transition:border-color .2s,background .2s,transform .12s;touch-action:manipulation}
+.opt:hover{border-color:var(--terra2);transform:translateX(3px)}
+.opt .l{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800;background:var(--sand);color:var(--terra)}
+.opt[aria-checked="true"]{border-color:var(--terra);background:#fbe4d2}
+.opt[aria-checked="true"] .l{background:var(--terra);color:#fff}
+.nav{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap}
+.nav .btn{flex:1 1 140px}
+.warn{margin-top:14px;padding:12px 14px;border-radius:10px;background:#fde8e6;border:1px solid var(--bad);color:#6b1510}
+.warn button{font:inherit;color:var(--terra);background:none;border:0;text-decoration:underline;cursor:pointer;padding:0;font-weight:700}
+
+/* ===== Resultado ===== */
+.res-head{display:flex;gap:22px;align-items:center;flex-wrap:wrap;justify-content:center;margin-bottom:18px}
+.ring{position:relative;width:170px;height:170px}
+.ring svg{transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:12;stroke-linecap:round}
+.ring .bg{stroke:var(--sand2)}
+.ring .fg{stroke:var(--terra);stroke-dasharray:339.29;stroke-dashoffset:339.29;transition:stroke-dashoffset 1.4s ease}
+.ring div{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.ring strong{font-family:var(--font);font-size:2.6rem;line-height:1;color:var(--terra)}
+.ring span{font-size:.8rem;color:var(--mut)}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;flex:1 1 240px}
+.stat{padding:12px;border-radius:12px;border:1px solid var(--line);background:#fff}
+.stat b{display:block;font-family:var(--font);font-size:1.5rem}
+.stat small{color:var(--mut)}
+.stat.ok b{color:var(--ok)} .stat.no b{color:var(--bad)}
+.msg{text-align:center;font-family:var(--font);font-size:1.25rem;font-weight:700;margin:6px 0 20px;color:var(--terra)}
+.item{border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:10px;background:#fff}
+.item.ok{border-left:6px solid var(--ok)} .item.no{border-left:6px solid var(--bad)}
+.tag{display:inline-block;font-size:.78rem;font-weight:800;padding:2px 10px;border-radius:99px;margin-bottom:6px;letter-spacing:.04em}
+.ok .tag{background:#dff3e6;color:var(--ok)} .no .tag{background:#fde8e6;color:var(--bad)}
+.item h3{font-size:1rem;margin-bottom:6px}
+.item p{font-size:.95rem;color:var(--mut)} .item p b{color:var(--ink)}
+.item .exp{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
+.foot{text-align:center;color:var(--mut);margin-top:18px;font-family:var(--font);font-style:italic}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <!-- Bandeira da Jordânia (estrela de 7 pontas desenhada pelo JS) -->
+    <svg class="flag" viewBox="0 0 60 30" role="img" aria-label="Bandeira da Jordânia">
+      <rect width="60" height="10" fill="#000"/><rect y="10" width="60" height="10" fill="#fff"/><rect y="20" width="60" height="10" fill="#007a3d"/>
+      <polygon points="0,0 30,15 0,30" fill="#ce1126"/><polygon id="star" fill="#fff"/>
+    </svg>
+    <b>Reino Hachemita da Jordânia</b>
+  </header>
+
+  <!-- TELA INICIAL -->
+  <section id="start" class="card">
+    <!-- Paisagem do deserto: sol e dunas -->
+    <svg class="banner" viewBox="0 0 800 220" role="img" aria-label="Dunas do deserto ao pôr do sol">
+      <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6c58a"/><stop offset="1" stop-color="#fbe6bf"/></linearGradient></defs>
+      <rect width="800" height="220" fill="url(#sky)"/>
+      <circle cx="590" cy="95" r="46" fill="#e98a3f" opacity=".9"/>
+      <path d="M0 150 Q120 100 260 140 T520 130 T800 120 V220 H0Z" fill="#dfa866"/>
+      <path d="M0 175 Q160 125 330 168 T640 160 T800 150 V220 H0Z" fill="#c98446"/>
+      <path d="M0 205 Q200 170 400 200 T800 190 V220 H0Z" fill="#a9552e"/>
+    </svg>
+    <div class="pad">
+      <h1>DESAFIO DE GEOGRAFIA: JORDÂNIA 🇯🇴</h1>
+      <p class="sub">Teste seus conhecimentos sobre a história, a cultura e a geografia da Jordânia.</p>
+      <button class="btn big" id="btnStart">INICIAR DESAFIO</button>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="hidden">
+    <div class="prog">
+      <div class="prog-top"><span id="progTxt"></span><span id="progPct"></span></div>
+      <div class="bar" role="progressbar" aria-label="Progresso" aria-valuemin="0" aria-valuemax="10" id="bar"><i id="barFill"></i></div>
+    </div>
+    <div class="card pad">
+      <div class="divider"></div>
+      <div class="qnum" id="qnum"></div>
+      <h2 class="qtxt" id="qtxt"></h2>
+      <div class="opts" id="opts" role="radiogroup" aria-labelledby="qtxt"></div>
+      <div class="warn hidden" id="warn" role="alert"></div>
+      <div class="nav">
+        <button class="btn ghost" id="btnPrev">Voltar</button>
+        <button class="btn" id="btnNext">Próxima</button>
+        <button class="btn hidden" id="btnFinish">FINALIZAR E CORRIGIR</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTADOS -->
+  <section id="result" class="card pad hidden">
+    <div class="divider"></div>
+    <h1>Resultado final</h1>
+    <p class="sub" id="resSub"></p>
+    <div class="res-head">
+      <div class="ring">
+        <svg viewBox="0 0 120 120" width="170" height="170" aria-hidden="true">
+          <circle class="bg" cx="60" cy="60" r="54"/><circle class="fg" id="ringFg" cx="60" cy="60" r="54"/>
+        </svg>
+        <div><strong id="score">0</strong><span>de 100 pontos</span></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><b id="sTotal">10</b><small>Total de perguntas</small></div>
+        <div class="stat"><b id="sPct">0%</b><small>Aproveitamento</small></div>
+        <div class="stat ok"><b id="sOk">0</b><small>Respostas corretas</small></div>
+        <div class="stat no"><b id="sBad">0</b><small>Respostas erradas</small></div>
+      </div>
+    </div>
+    <p class="msg" id="msg"></p>
+    <div id="list"></div>
+    <p class="foot">Shukran! Obrigado por participar. 🌵</p>
+  </section>
+</div>
+
+<script>
+/* ===== Perguntas e gabarito (c = índice da alternativa correta) ===== */
+const Q = [
+ {q:"Qual é o principal recurso mineral da Jordânia?",o:["Petróleo","Fosfato e potássio","Café","Ouro"],c:1,
+  e:"A Jordânia tem pouco petróleo; sua mineração gira em torno do fosfato e do potássio (extraído do Mar Morto)."},
+ {q:"Qual é a capital da Jordânia?",o:["Damasco","Jerusalém","Amã","Beirute"],c:2,
+  e:"Amã é a capital e a maior cidade do país. Damasco é da Síria e Beirute é do Líbano."},
+ {q:"Qual cidade arqueológica da Jordânia é considerada uma das Novas Sete Maravilhas do Mundo?",o:["Coliseu de Roma","Petra","Taj Mahal","Machu Picchu"],c:1,
+  e:"Petra, a “cidade rosa” esculpida na rocha, foi eleita uma das Novas Sete Maravilhas em 2007."},
+ {q:"Qual é a língua oficial da Jordânia?",o:["Inglês","Árabe","Francês","Espanhol"],c:1,
+  e:"O árabe é a língua oficial. O inglês é muito usado em negócios e educação, mas não é oficial."},
+ {q:"Em que data a Jordânia conquistou sua independência?",o:["25 de maio de 1946","1º de janeiro de 1918","7 de setembro de 1822","15 de novembro de 1960"],c:0,
+  e:"A independência do domínio britânico é comemorada em 25 de maio de 1946. 7 de setembro de 1822 é a data do Brasil."},
+ {q:"Quem foram os nabateus?",o:["Um povo árabe antigo associado à construção e ao desenvolvimento de Petra","Um povo que vivia na China","Um grupo de navegadores portugueses","Um povo originário da América"],c:0,
+  e:"Os nabateus eram um povo árabe antigo, comerciantes de caravanas, que fizeram de Petra sua capital."},
+ {q:"Qual destas opções representa melhor uma estimativa aproximada do PIB anual da Jordânia?",o:["5 bilhões de dólares","20 bilhões de dólares","50 bilhões de dólares","500 bilhões de dólares"],c:2,
+  e:"Considera-se a opção C (cerca de 50 bilhões de dólares) como a pretendida neste exercício. O PIB varia conforme o ano e a fonte estatística."},
+ {q:"Quais impérios e potências governaram ou exerceram domínio sobre territórios da região da atual Jordânia ao longo da história?",o:["Romano, babilônico, assírio, otomano e britânico","Japonês, mexicano e canadense","Brasileiro, argentino e chileno","Australiano, sueco e norueguês"],c:0,
+  e:"A região foi dominada por assírios, babilônios, romanos, otomanos e, no século XX, pelos britânicos."},
+ {q:"Com qual rio está relacionado o nome Jordânia?",o:["Rio Jordão","Rio Nilo","Rio Amazonas","Rio Tigre"],c:0,
+  e:"O país tem o nome do Rio Jordão, que forma parte de sua fronteira oeste."},
+ {q:"Qual estado brasileiro tem uma área mais próxima da área da Jordânia?",o:["Amazonas","São Paulo","Santa Catarina","Bahia"],c:2,
+  e:"A Jordânia tem cerca de 89 mil km²; Santa Catarina tem cerca de 96 mil km², a mais próxima entre as opções."}
+];
+const L = ["A","B","C","D"], TOTAL = Q.length;
+let answers, cur;   // answers[i] = índice escolhido ou null
+
+const $ = id => document.getElementById(id);
+const show = id => { ["start","quiz","result"].forEach(s => $(s).classList.toggle("hidden", s !== id)); window.scrollTo({top:0,behavior:"smooth"}); };
+
+/* Estrela de 7 pontas da bandeira */
+(function(){ const cx=9,cy=15,R=4,r=1.9,p=[];
+  for(let i=0;i<14;i++){const a=-Math.PI/2+i*Math.PI/7,d=i%2?r:R;p.push((cx+d*Math.cos(a)).toFixed(2)+","+(cy+d*Math.sin(a)).toFixed(2));}
+  $("star").setAttribute("points",p.join(" ")); })();
+
+function startQuiz(){ answers = Array(TOTAL).fill(null); cur = 0; $("warn").classList.add("hidden"); renderQ(); show("quiz"); }
+
+/* ===== Mostra a pergunta atual ===== */
+function renderQ(){
+  const q = Q[cur];
+  $("qnum").textContent = "Pergunta " + (cur+1) + " de " + TOTAL;
+  $("qtxt").textContent = q.q;
+  const box = $("opts"); box.innerHTML = "";
+  q.o.forEach((t,i)=>{
+    const b = document.createElement("button");
+    b.type="button"; b.className="opt"; b.setAttribute("role","radio");
+    b.setAttribute("aria-checked", answers[cur]===i);
+    b.innerHTML = '<span class="l">'+L[i]+'</span><span></span>';
+    b.lastChild.textContent = t;
+    b.onclick = () => { answers[cur] = i; $("warn").classList.add("hidden"); renderQ(); };  // só uma resposta por pergunta
+    box.appendChild(b);
+  });
+  $("btnPrev").disabled = cur===0;
+  const last = cur===TOTAL-1;
+  $("btnNext").classList.toggle("hidden", last);
+  $("btnFinish").classList.toggle("hidden", !last);
+  updateProgress();
+}
+
+/* ===== Barra de progresso ===== */
+function updateProgress(){
+  const n = answers.filter(a=>a!==null).length, pct = n/TOTAL*100;
+  $("progTxt").textContent = n+" de "+TOTAL+" respondidas";
+  $("progPct").textContent = Math.round(pct)+"%";
+  $("barFill").style.width = pct+"%";
+  $("bar").setAttribute("aria-valuenow", n);
+}
+
+$("btnStart").onclick = startQuiz;
+$("btnPrev").onclick = () => { if(cur>0){cur--;renderQ();} };
+$("btnNext").onclick = () => { if(cur<TOTAL-1){cur++;renderQ();} };
+
+/* ===== Finalizar: bloqueia se faltar resposta ===== */
+$("btnFinish").onclick = () => {
+  const missing = answers.map((a,i)=>a===null?i:-1).filter(i=>i>=0);
+  const w = $("warn");
+  if(missing.length){
+    w.innerHTML = "";
+    w.append((missing.length===1?"Falta 1 pergunta: ":"Faltam "+missing.length+" perguntas: ")+missing.map(i=>i+1).join(", ")+". ");
+    const go = document.createElement("button"); go.textContent = "Ir para a pergunta "+(missing[0]+1);
+    go.onclick = () => { cur = missing[0]; w.classList.add("hidden"); renderQ(); };
+    w.appendChild(go); w.classList.remove("hidden"); return;
+  }
+  grade();
+};
+
+/* ===== Correção automática ===== */
+function grade(){
+  const ok = answers.filter((a,i)=>a===Q[i].c).length, bad = TOTAL-ok;
+  const score = Math.round(ok/TOTAL*100), pct = score;   // 10 questões × 10 pontos
+  $("sTotal").textContent = TOTAL; $("sOk").textContent = ok; $("sBad").textContent = bad;
+  $("sPct").textContent = pct+"%"; $("score").textContent = score;
+  $("resSub").textContent = "Você acertou "+ok+" de "+TOTAL+" perguntas.";
+  $("msg").textContent = score>=90 ? "Excelente! Você domina muito bem o conteúdo!"
+    : score>=70 ? "Muito bem! Você está no caminho certo!"
+    : score>=50 ? "Bom esforço! Continue estudando!"
+    : "Não desista! Revise o conteúdo e tente novamente!";
+  const list = $("list"); list.innerHTML = "";
+  Q.forEach((q,i)=>{
+    const hit = answers[i]===q.c, d = document.createElement("div");
+    d.className = "item "+(hit?"ok":"no");
+    d.innerHTML = '<span class="tag"></span><h3></h3><p class="a"></p><p class="g"></p><p class="exp"></p>';
+    d.querySelector(".tag").textContent = hit ? "CORRETA" : "INCORRETA";
+    d.querySelector("h3").textContent = (i+1)+". "+q.q;
+    d.querySelector(".a").innerHTML = "<b>Sua resposta:</b> ";
+    d.querySelector(".a").append(L[answers[i]]+") "+q.o[answers[i]]);
+    d.querySelector(".g").innerHTML = "<b>Gabarito:</b> ";
+    d.querySelector(".g").append(L[q.c]+") "+q.o[q.c]);
+    d.querySelector(".exp").textContent = q.e;
+    list.appendChild(d);
+  });
+  show("result");
+  // anima o círculo (circunferência = 2π·54 ≈ 339,29)
+  const fg = $("ringFg"); fg.style.strokeDashoffset = 339.29;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{ fg.style.strokeDashoffset = 339.29*(1-score/100); }));
+}
+</script>
+</body>
+</html>
